@@ -26,6 +26,8 @@
         <logback.version>1.1.2</logback.version>
         <cglib.version>3.2.9</cglib.version>
         <asm.version>7.0</asm.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencyManagement>

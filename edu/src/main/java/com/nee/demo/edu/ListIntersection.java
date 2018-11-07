@@ -7,6 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.*;
 import java.util.*;
 
+import static jdk.nashorn.internal.objects.NativeMath.max;
+import static jdk.nashorn.internal.objects.NativeMath.min;
+
 @Data
 @ToString
 @Slf4j
@@ -45,12 +48,27 @@ public class ListIntersection {
             log.info("spent {} seconds load data", (System.currentTimeMillis() - startTime) / 1000);
 
             userMap.forEach((u_id, users) -> {
-
+                if (listIntersection(users)) {
+                    userId.add(u_id);
+                }
             });
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private static boolean listIntersection(List<User> us) {
+        for (int i = 0; i < us.size() - 1; i++) {
+            for (int j = i + 1; j < us.size(); j++) {
+                if (max(us.get(i).getBegin(), us.get(j).getBegin())
+                        < min(us.get(i).getEnd(), us.get(j).getEnd()))
+                    return true;
+
+            }
+        }
+        return false;
     }
 
 

@@ -4,11 +4,15 @@ import lombok.Data;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static jdk.nashorn.internal.objects.NativeMath.max;
-import static jdk.nashorn.internal.objects.NativeMath.min;
 
 @Data
 @ToString
@@ -17,7 +21,7 @@ public class ListIntersection {
 
 
     public static void main(String[] args) {
-        List<String> userId = new ArrayList<>();
+        List<String> userIds = new ArrayList<>();
         Map<String, List<User>> userMap = new HashMap<>();
         try {
             Long startTime = System.currentTimeMillis();
@@ -39,36 +43,69 @@ public class ListIntersection {
             filecontent = null;
             String[] lines = content.split("\n");
             content = null;
+            int i = 0;
+            int handleCoune = 0;
             for (String line : lines) {
                 User user = new User(line);
+                lines[i] = null;
                 userMap.computeIfAbsent(user.getU_id(), k -> new ArrayList<>());
                 userMap.get(user.getU_id()).add(user);
+                i++;
+                if (i % 10000 == 0) System.out.println(i);
+                // if (i == 950000) break;
+                if (userMap.get(user.getU_id()).size() > 1) handleCoune ++;
             }
 
+            log.info("The number of wait to handle user: {}", handleCoune);
             log.info("spent {} seconds load data", (System.currentTimeMillis() - startTime) / 1000);
 
+            startTime = System.currentTimeMillis();
+            log.info("start find listIntersection user...");
             userMap.forEach((u_id, users) -> {
-                if (listIntersection(users)) {
-                    userId.add(u_id);
+                if (listIntersection(u_id, users)) {
+                    userIds.add(u_id);
                 }
             });
+            log.info("spent {} seconds find listIntersection user", (System.currentTimeMillis() - startTime) / 1000);
 
+            log.info("listIntersection user size: {}", userIds.size());
+            log.info("all user size: {}", userMap.size());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 
-    private static boolean listIntersection(List<User> us) {
+    private static boolean listIntersection(String u_id, List<User> us) {
+
+        if (us == null || us.size() <= 1) return false;
+
+        log.info("compute u, u_id = {}", u_id);
+
         for (int i = 0; i < us.size() - 1; i++) {
             for (int j = i + 1; j < us.size(); j++) {
-                if (max(us.get(i).getBegin(), us.get(j).getBegin())
-                        < min(us.get(i).getEnd(), us.get(j).getEnd()))
+
+                String maxBegin = max(us.get(i).getBegin(), us.get(j).getBegin());
+                String minEnd = min(us.get(i).getEnd(), us.get(j).getEnd());
+
+                if (maxBegin .compareTo(minEnd) < 0)
                     return true;
 
             }
         }
         return false;
+    }
+
+    private static String max(String s1, String s2) {
+        if (s1.compareTo(s2) < 0) return s2;
+        if (s1.compareTo(s2) > 0) return s1;
+        return s1;
+    }
+
+    private static String min(String s1, String s2) {
+        if (s1.compareTo(s2) < 0) return s1;
+        if (s1.compareTo(s2) > 0) return s2;
+        return s1;
     }
 
 
@@ -85,7 +122,7 @@ class User {
         String[] s = content.split(",");
         u_id = s[0];
         ad = s[1];
-        begin = s[2];
-        end = s[3];
+        begin = s[3];
+        end = s[2];
     }
 }

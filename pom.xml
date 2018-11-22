@@ -23,9 +23,11 @@
         <commons-lang3.version>3.3.2</commons-lang3.version>
         <lombok.version>1.18.4</lombok.version>
         <netty.version>4.1.31.Final</netty.version>
-        <logback.version>1.1.2</logback.version>
+        <logback.version>1.2.3</logback.version>
         <cglib.version>3.2.9</cglib.version>
         <asm.version>7.0</asm.version>
+        <mysql-driver.version>8.0.13</mysql-driver.version>
+        <javax-persistence.version>2.2</javax-persistence.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
@@ -67,6 +69,21 @@
                 <version>4.0.1</version>
                 <scope>provided</scope>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-driver.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>javax.persistence-api</artifactId>
+                <version>${javax-persistence.version}</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>

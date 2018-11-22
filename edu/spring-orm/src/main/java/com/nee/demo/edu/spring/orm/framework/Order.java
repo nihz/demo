@@ -1,4 +1,4 @@
-package com.gupaoedu.vip.orm.framework;
+package com.nee.demo.edu.spring.orm.framework;
 
 
 /**

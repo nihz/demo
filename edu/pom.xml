@@ -10,7 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>edu</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
+    <modules>
+        <module>spring-cloud</module>
+        <module>spring-resource-code</module>
+        <module>spring-orm</module>
+    </modules>
 
 
     <dependencies>

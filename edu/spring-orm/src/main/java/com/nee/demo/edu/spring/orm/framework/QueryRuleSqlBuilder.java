@@ -1,4 +1,4 @@
-package com.gupaoedu.vip.orm.framework;
+package com.nee.demo.edu.spring.orm.framework;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,12 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang.ArrayUtils;
-
-import com.gupaoedu.vip.orm.framework.QueryRule.Rule;
-
-import javax.core.common.utils.StringUtils;
 
 
 /**
@@ -24,12 +18,12 @@ public class QueryRuleSqlBuilder {
 	private List<String> properties; //保存列名列表
 	private List<Object> values; //保存参数值列表
 	private List<Order> orders; //保存排序规则列表
-	
-	private String whereSql = ""; 
+
+	private String whereSql = "";
 	private String orderSql = "";
 	private Object [] valueArr = new Object[]{};
 	private Map<Object,Object> valueMap = new HashMap<Object,Object>();
-	
+
 	/**
 	 * 或得查询条件
 	 * @return
@@ -37,7 +31,7 @@ public class QueryRuleSqlBuilder {
 	public String getWhereSql(){
 		return this.whereSql;
 	}
-	
+
 	/**
 	 * 获得排序条件
 	 * @return
@@ -45,7 +39,7 @@ public class QueryRuleSqlBuilder {
 	public String getOrderSql(){
 		return this.orderSql;
 	}
-	
+
 	/**
 	 * 获得参数值列表
 	 * @return
@@ -53,7 +47,7 @@ public class QueryRuleSqlBuilder {
 	public Object [] getValues(){
 		return this.valueArr;
 	}
-	
+
 	/**
 	 * 获取参数列表
 	 * @return
@@ -61,7 +55,7 @@ public class QueryRuleSqlBuilder {
 	public Map<Object,Object> getValueMap(){
 		return this.valueMap;
 	}
-	
+
 	/**
 	 * 创建SQL构造器
 	 * @param queryRule
@@ -132,10 +126,10 @@ public class QueryRuleSqlBuilder {
 		//拼装参数值
 		appendValues();
 	}
-	
+
 	/**
 	 * 去掉order
-	 * 
+	 *
 	 * @param sql
 	 * @return
 	 */
@@ -149,10 +143,10 @@ public class QueryRuleSqlBuilder {
 		m.appendTail(sb);
 		return sb.toString();
 	}
-	
+
 	/**
 	 * 去掉select
-	 * 
+	 *
 	 * @param sql
 	 * @return
 	 */
@@ -164,7 +158,7 @@ public class QueryRuleSqlBuilder {
 			return sql;
 		}
 	}
-	
+
 	/**
 	 * 处理like
 	 * @param rule
@@ -197,7 +191,7 @@ public class QueryRuleSqlBuilder {
 		add(rule.getAndOr(),rule.getPropertyName(),"","between",rule.getValues()[0],"and");
 		add(0,"","","",rule.getValues()[1],"");
 	}
-	
+
 	/**
 	 * 处理 =
 	 * @param rule
@@ -299,7 +293,7 @@ public class QueryRuleSqlBuilder {
 		add(rule.getAndOr(),rule.getPropertyName(),"=","''");
 	}
 
-	
+
 	/**
 	 * 处理in和not in
 	 * @param rule
@@ -312,7 +306,7 @@ public class QueryRuleSqlBuilder {
 		if ((rule.getValues().length == 1) && (rule.getValues()[0] != null)
 				&& (rule.getValues()[0] instanceof List)) {
 			List<Object> list = (List) rule.getValues()[0];
-			
+
 			if ((list != null) && (list.size() > 0)){
 				for (int i = 0; i < list.size(); i++) {
 					if(i == 0 && i == list.size() - 1){
@@ -345,7 +339,7 @@ public class QueryRuleSqlBuilder {
 			}
 		}
 	}
-	
+
 	/**
 	 * 处理 not in
 	 * @param rule
@@ -353,7 +347,7 @@ public class QueryRuleSqlBuilder {
 	private void processNotIN(Rule rule){
 		inAndNotIn(rule,"not in");
 	}
-	
+
 	/**
 	 * 处理 in
 	 * @param rule
@@ -361,7 +355,7 @@ public class QueryRuleSqlBuilder {
 	private  void processIN(Rule rule) {
 		inAndNotIn(rule,"in");
 	}
-	
+
 	/**
 	 * 处理 order by
 	 * @param rule 查询规则
@@ -384,8 +378,8 @@ public class QueryRuleSqlBuilder {
 			break;
 		}
 	}
-	
-	
+
+
 	/**
 	 * 加入到sql查询规则队列
 	 * @param andOr and 或者 or
@@ -396,7 +390,7 @@ public class QueryRuleSqlBuilder {
 	private  void add(int andOr,String key,String split ,Object value){
 		add(andOr,key,split,"",value,"");
 	}
-	
+
 	/**
 	 * 加入到sql查询规则队列
 	 * @param andOr and 或则 or
@@ -407,15 +401,15 @@ public class QueryRuleSqlBuilder {
 	 * @param suffix 值后缀
 	 */
 	private  void add(int andOr,String key,String split ,String prefix,Object value,String  suffix){
-		String andOrStr = (0 == andOr ? "" :(QueryRule.AND == andOr ? " and " : " or "));  
+		String andOrStr = (0 == andOr ? "" :(QueryRule.AND == andOr ? " and " : " or "));
 		properties.add(CURR_INDEX, andOrStr + key + " " + split + prefix + (null != value ? " ? " : " ") + suffix);
 		if(null != value){
 			values.add(CURR_INDEX,value);
 			CURR_INDEX ++;
 		}
 	}
-	
-	
+
+
 	/**
 	 * 拼装 where 语句
 	 */
@@ -426,7 +420,7 @@ public class QueryRuleSqlBuilder {
 		}
 		this.whereSql = removeSelect(removeOrders(whereSql.toString()));
 	}
-	
+
 	/**
 	 * 拼装排序语句
 	 */
@@ -440,7 +434,7 @@ public class QueryRuleSqlBuilder {
 		}
 		this.orderSql = removeSelect(removeOrders(orderSql.toString()));
 	}
-	
+
 	/**
 	 * 拼装参数值
 	 */
@@ -452,5 +446,5 @@ public class QueryRuleSqlBuilder {
 		}
 		this.valueArr = val;
 	}
-	
+
 }

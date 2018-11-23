@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.zookeeper.serviceregistry.ServiceInstanceRegistration;
 import org.springframework.cloud.zookeeper.serviceregistry.ZookeeperRegistration;
 import org.springframework.cloud.zookeeper.serviceregistry.ZookeeperServiceRegistry;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @SpringBootApplication
 @RestController
+@EnableDiscoveryClient
 @Slf4j
 public class SpringCloudZookeeperDiscoverApplication {
 

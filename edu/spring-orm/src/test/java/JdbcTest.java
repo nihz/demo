@@ -42,7 +42,7 @@ public class JdbcTest {
             for (Field field : fields) {
                 Object value = field.get(condition);
                 if (value != null) {
-                    sb.append("and ").append(field.getName()).append(" = '").append(value).append("'")
+                    sb.append("and ").append(field.getName()).append(" = '").append(value).append("'");
                 }
             }
 

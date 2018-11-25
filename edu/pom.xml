@@ -15,6 +15,7 @@
         <module>spring-cloud</module>
         <module>spring-resource-code</module>
         <module>spring-orm</module>
+        <module>spring-boot</module>
     </modules>
 
 

@@ -2,11 +2,32 @@
 
 ## Spring Cloud Config
 
+### Spring Cloud Config Server
+
+##### 构建Spring Cloud 配置服务器
+
+实现步骤
+
+1. 在Configuration Class 标记 `@EnableConfigServer`
+
+2. 配置文件目录（基于git）
+
+   1. application.properties （默认）
+   2. application-test.properties
+
+3. 服务端配置版本仓库（本地）
+
+   ​	spring.cloud.config.server.git.uri=0
+
+4. 
+
+
+
 ### Spring Cloud Config Client
 
 java.util.Observable 是订阅者
 
-
+**@RefreshScope 可以动态的加载bean的属性**
 
 事件监听模式
 

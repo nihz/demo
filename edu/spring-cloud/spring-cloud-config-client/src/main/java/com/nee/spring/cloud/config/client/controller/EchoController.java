@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class EchoController {
 
-    @Value("${my.name}")
     private String myName;
 
     @GetMapping("myname")

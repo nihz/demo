@@ -15,6 +15,6 @@ public class WebFluxConfiguration {
     @Bean
     public RouterFunction<ServerResponse> saveUser(UserHandler userHandler) {
 
-        return route(POST("/web/flux/user/save"), userHandler::save);
+        return route(POST("/web/flux/com.nee.user/save"), userHandler::save);
     }
 }

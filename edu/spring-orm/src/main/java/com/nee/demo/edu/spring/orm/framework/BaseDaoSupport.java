@@ -454,7 +454,7 @@
 //     *
 //     * <pre>
 //     *     <code>
-//     * User user = service.findUnique(User.class, &quot;id&quot;, 5);
+//     * User com.nee.user = service.findUnique(User.class, &quot;id&quot;, 5);
 //     * </code>
 //     * </pre>
 //     *
@@ -528,8 +528,8 @@
 //     * <pre>
 //     *		<code>
 //     * QueryRule queryRule = QueryRule.getInstance();
-//     * queryRule.addLike(&quot;username&quot;, user.getUsername());
-//     * queryRule.addLike(&quot;monicker&quot;, user.getMonicker());
+//     * queryRule.addLike(&quot;username&quot;, com.nee.user.getUsername());
+//     * queryRule.addLike(&quot;monicker&quot;, com.nee.user.getMonicker());
 //     * queryRule.addBetween(&quot;id&quot;, lowerId, upperId);
 //     * queryRule.addDescOrder(&quot;id&quot;);
 //     * queryRule.addAscOrder(&quot;username&quot;);
@@ -641,8 +641,8 @@
 //     * <pre>
 //     *		<code>
 //     * QueryRule queryRule = QueryRule.getInstance();
-//     * queryRule.addLike(&quot;username&quot;, user.getUsername());
-//     * queryRule.addLike(&quot;monicker&quot;, user.getMonicker());
+//     * queryRule.addLike(&quot;username&quot;, com.nee.user.getUsername());
+//     * queryRule.addLike(&quot;monicker&quot;, com.nee.user.getMonicker());
 //     * queryRule.addBetween(&quot;id&quot;, lowerId, upperId);
 //     * queryRule.addDescOrder(&quot;id&quot;);
 //     * queryRule.addAscOrder(&quot;username&quot;);
@@ -733,7 +733,7 @@
 //     * Map properties = new HashMap();
 //     * properties.put(&quot;sex&quot;, &quot;1&quot;);
 //     * properties.put(&quot;age&quot;, 18);
-//     * User user = service.findUnique(User.class, properties);
+//     * User com.nee.user = service.findUnique(User.class, properties);
 //     * </code>
 //     * </pre>
 //     *
@@ -753,10 +753,10 @@
 //     * <pre>
 //     *     <code>
 //     * QueryRule queryRule = QueryRule.getInstance();
-//     * queryRule.addLike(&quot;username&quot;, user.getUsername());
-//     * queryRule.addLike(&quot;monicker&quot;, user.getMonicker());
+//     * queryRule.addLike(&quot;username&quot;, com.nee.user.getUsername());
+//     * queryRule.addLike(&quot;monicker&quot;, com.nee.user.getMonicker());
 //     * queryRule.addBetween(&quot;id&quot;, lowerId, upperId);
-//     * User user = service.findUnique(User.class, queryRule);
+//     * User com.nee.user = service.findUnique(User.class, queryRule);
 //     * </code>
 //     * </pre>
 //     *

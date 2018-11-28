@@ -16,7 +16,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @PostMapping("/web/mvc/user/save")
+    @PostMapping("/web/mvc/com.nee.user/save")
     public boolean save(@RequestBody User user) {
 
         return userRepository.save(user);

@@ -56,20 +56,20 @@ public class ListIntersection {
                 if (userMap.get(user.getU_id()).size() > 1) handleCoune ++;
             }
 
-            log.info("The number of wait to handle user: {}", handleCoune);
+            log.info("The number of wait to handle com.nee.user: {}", handleCoune);
             log.info("spent {} seconds load data", (System.currentTimeMillis() - startTime) / 1000);
 
             startTime = System.currentTimeMillis();
-            log.info("start find listIntersection user...");
+            log.info("start find listIntersection com.nee.user...");
             userMap.forEach((u_id, users) -> {
                 if (listIntersection(u_id, users)) {
                     userIds.add(u_id);
                 }
             });
-            log.info("spent {} seconds find listIntersection user", (System.currentTimeMillis() - startTime) / 1000);
+            log.info("spent {} seconds find listIntersection com.nee.user", (System.currentTimeMillis() - startTime) / 1000);
 
-            log.info("listIntersection user size: {}", userIds.size());
-            log.info("all user size: {}", userMap.size());
+            log.info("listIntersection com.nee.user size: {}", userIds.size());
+            log.info("all com.nee.user size: {}", userMap.size());
         } catch (IOException e) {
             e.printStackTrace();
         }

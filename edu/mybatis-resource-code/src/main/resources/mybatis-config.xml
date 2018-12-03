@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="mybatis-config.properties" />
+
+    <typeHandlers>
+        <typeHandler handler="com.nee.mybatis.resource.code.demo.user.UserSexTypeHandle"/>
+    </typeHandlers>
+    <objectFactory type="com.nee.mybatis.resource.code.demo.user.TestObjectFactory">
+        <property name="name" value="HELLO, WORLD" />
+    </objectFactory>
+    <plugins>
+        <plugin interceptor="com.nee.mybatis.resource.code.demo.user.TestInterceptor">
+            <property name="name" value="Myself Interceptor" />
+        </plugin>
+
+        <plugin interceptor="com.nee.mybatis.resource.code.demo.user.TestInterceptor2">
+            <property name="name" value="Myself Interceptor2" />
+        </plugin>
+    </plugins>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://192.168.1.4:3306/test"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="mappers/UserMapper.xml"/>
+    </mappers>
+</configuration>

@@ -16,6 +16,7 @@
         <module>spring-resource-code</module>
         <module>spring-orm</module>
         <module>spring-boot</module>
+        <module>mybatis-resource-code</module>
     </modules>
 
 

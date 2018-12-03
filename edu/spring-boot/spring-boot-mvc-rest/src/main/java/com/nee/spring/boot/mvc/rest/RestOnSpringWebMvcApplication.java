@@ -3,7 +3,7 @@ package com.nee.spring.boot.mvc.rest;
 import ch.qos.logback.core.status.ErrorStatus;
 import com.nee.spring.boot.mvc.rest.interceptor.DefaultHandlerInterceptor;
 import org.apache.coyote.ErrorState;
-import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.WebApplicationType;dd
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.server.ErrorPage;
@@ -18,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class RestOnSpringWebMvcApplication implements WebMvcConfigurer, ErrorPageRegistrar {
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(RestOnSpringWebMvcApplication.class).web(WebApplicationType.SERVLET).run(args);
+        new SpringApplicationBuilder(RestOnSpringWebMvcApplication.class).web(true).run(args);
     }
 
     @Override

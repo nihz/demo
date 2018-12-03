@@ -12,7 +12,7 @@ public class JdbcTest {
     public static void main(String[] args) {
         try {
 
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://192.168.1.5:3306", "debian-sys-maint", "SrwlktF91o0REqh6");
 
             PreparedStatement preparedStatement = connection.prepareStatement("select * from a");

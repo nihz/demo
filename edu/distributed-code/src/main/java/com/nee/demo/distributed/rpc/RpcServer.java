@@ -1,12 +1,23 @@
 package com.nee.demo.distributed.rpc;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+import io.netty.util.CharsetUtil;
+import lombok.extern.slf4j.Slf4j;
 
+import java.nio.charset.Charset;
+import java.util.Hashtable;
+import java.util.concurrent.Future;
+
+@Slf4j
 public class RpcServer {
 
+    private static final Hashtable<String, Object> bindings = new Hashtable<>();
     private static final String IP = "localhost";
     private static final int DEFAULT_PORT = 6666;
     private static final int BOSS_GROUP_SIZE = Runtime.getRuntime().availableProcessors();
@@ -14,22 +25,46 @@ public class RpcServer {
 
     private static final EventLoopGroup BOOS_GROUP = new NioEventLoopGroup(BOSS_GROUP_SIZE);
     private static final EventLoopGroup WORK_GROUP = new NioEventLoopGroup(WORK_GROUP_SIZE);
-    private int port;
+
     public RpcServer() {
         this(DEFAULT_PORT);
     }
 
     public RpcServer(int port) {
-        this.port = port;
+        this.start(port);
+
+
     }
 
-    public void publish() {
+    public void publish(Object service) {
+        synchronized (bindings) {
+            bindings.put(service.getClass().getName(), service);
+        }
+    }
 
+    private void start(int port) {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
-        serverBootstrap.group(BOOS_GROUP, WORK_GROUP)
-                .channel(NioServerSocketChannel.class);
-
+        try {
+            ChannelFuture future = serverBootstrap.group(BOOS_GROUP, WORK_GROUP)
+                    .channel(NioServerSocketChannel.class)
+                    .childHandler(new ChannelInitializer<Channel>() {
+                        @Override
+                        protected void initChannel(Channel channel) throws Exception {
+                            ChannelPipeline pp = channel.pipeline();
+                            pp.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
+                            pp.addLast(new StringDecoder(CharsetUtil.UTF_8));
+                            pp.addLast(new StringEncoder(CharsetUtil.UTF_8));
+                            pp.addLast(new RpcServerHandler(RpcServer.this));
+                        }
+                    }).bind(port).sync();
+            log.info("server start success at ip: {}, port: {}", IP, port);
+            future.channel().closeFuture().sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-
+    Object lookup(String serviceName) {
+        return bindings.get(serviceName);
+    }
 }

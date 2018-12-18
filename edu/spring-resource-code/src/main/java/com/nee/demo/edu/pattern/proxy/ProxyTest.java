@@ -23,16 +23,16 @@ public class ProxyTest {
 //
 //
 //
-//        Object o = (Son)new CglibProxy().getInstance(Son.class);
-//        ((Son) o).findLove();
+        Object o = (Son)new CglibProxy().getInstance(Son.class);
+        ((Son) o).findLove();
 //
 //        byte[] bytes = ProxyGenerator.generateProxyClass("$Proxy0", new Class[]{Person.class});
 //        FileOutputStream os = new FileOutputStream("E://$proxy0.class");
 //        os.write(bytes);
 //
 //        os.close();
-
-        Person b = (Person) new NeeProxyTest().getInstance(new Son());
-        b.findLove();
+//
+//        Person b = (Person) new NeeProxyTest().getInstance(new Son());
+//        b.findLove();
     }
 }

@@ -37,10 +37,11 @@ public class NettyServer {
                             pipeline.addLast(new TcpServerHandler());
                         }
                     }).bind(IP, PORT).sync();
-
-            cf.channel().closeFuture().sync();
             log.info("server start at ip={}, port={}", IP, PORT);
 
+            cf.channel().closeFuture().sync();
+            bossGroup.shutdownGracefully();
+            workGroup.shutdownGracefully();
         } catch (Exception e) {
 
         }

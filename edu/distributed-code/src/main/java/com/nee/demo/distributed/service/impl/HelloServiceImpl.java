@@ -1,5 +1,6 @@
 package com.nee.demo.distributed.service.impl;
 
+
 import com.nee.demo.distributed.service.HelloService;
 
 import java.rmi.RemoteException;

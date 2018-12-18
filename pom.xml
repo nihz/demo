@@ -11,7 +11,7 @@
         <module>edu</module>
         <module>jvm</module>
         <module>leetcode</module>
-        <module>distributed</module>
+        <module>com.nee.demo.distributed</module>
     </modules>
     <packaging>pom</packaging>
 

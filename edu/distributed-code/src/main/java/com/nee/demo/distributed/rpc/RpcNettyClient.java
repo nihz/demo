@@ -3,14 +3,21 @@ package com.nee.demo.distributed.rpc;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.util.CharsetUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.LinkedBlockingDeque;
 
+@Slf4j
 public class RpcNettyClient {
     private static final String IP = "localhost";
     private static final int PORT = 6666;
@@ -25,17 +32,21 @@ public class RpcNettyClient {
                 .group(GROUP)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.TCP_NODELAY, true)
-                .handler(new ChannelInitializer<Channel>() {
+                .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(Channel channel) throws Exception {
+                    protected void initChannel(SocketChannel channel) throws Exception {
 
-                        ChannelPipeline pp = channel.pipeline();
-                        pp.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
-                        pp.addLast("frameEncoder", new LengthFieldPrepender(Integer.MAX_VALUE, 4));
-                        pp.addLast("decoder", new StringDecoder());
-                        pp.addLast("encoder", new StringEncoder());
-                        pp.addLast("handler", new ChannelInboundHandlerAdapter());
-
+                        ChannelPipeline pipeline = channel.pipeline();
+                        /*pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
+                        pipeline.addLast("frameEncoder", new LengthFieldPrepender(Integer.MAX_VALUE, 4));
+                        pipeline.addLast("decoder", new StringDecoder(CharsetUtil.UTF_8));
+                        pipeline.addLast("encoder", new StringEncoder(CharsetUtil.UTF_8));*/
+                        pipeline.addLast(
+                                new ObjectDecoder(1024, ClassResolvers.cacheDisabled(this
+                                        .getClass().getClassLoader())));
+                        // 设置发送消息编码器
+                        pipeline.addLast(new ObjectEncoder());
+                        pipeline.addLast("handler", new RpcClientHandler(RpcNettyClient.this));
                     }
                 });
     }
@@ -43,13 +54,16 @@ public class RpcNettyClient {
 
     public void sendRequest(InvokeRequest invokeRequest) {
 
+        EventLoopGroup group = new NioEventLoopGroup();
         try {
-            ChannelFuture future = bootstrap.connect(IP, PORT).sync();
-            pendings.add(invokeRequest);
-            future.channel().writeAndFlush(invokeRequest.getPacket());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            pendings.remove(invokeRequest);
+                ChannelFuture f = bootstrap.connect(IP, PORT).sync();
+                pendings.add(invokeRequest);
+                f.channel().writeAndFlush(invokeRequest.getPacket());
+                f.channel().closeFuture();
+        } catch (Exception e) {
+            log.error("client exception: {}", e.getMessage());
+        } finally {
+            group.shutdownGracefully();
         }
     }
 

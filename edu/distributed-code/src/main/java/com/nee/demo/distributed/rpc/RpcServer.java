@@ -5,6 +5,9 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.util.CharsetUtil;
@@ -15,7 +18,7 @@ import java.util.Hashtable;
 import java.util.concurrent.Future;
 
 @Slf4j
-public class RpcServer {
+public class RpcServer extends Thread {
 
     private static final Hashtable<String, Object> bindings = new Hashtable<>();
     private static final String IP = "localhost";
@@ -25,6 +28,8 @@ public class RpcServer {
 
     private static final EventLoopGroup BOOS_GROUP = new NioEventLoopGroup(BOSS_GROUP_SIZE);
     private static final EventLoopGroup WORK_GROUP = new NioEventLoopGroup(WORK_GROUP_SIZE);
+
+    private int port;
 
     public RpcServer() {
         this(DEFAULT_PORT);
@@ -38,11 +43,17 @@ public class RpcServer {
 
     public void publish(Object service) {
         synchronized (bindings) {
-            bindings.put(service.getClass().getName(), service);
+            bindings.put(service.getClass().getInterfaces()[0].getName(), service);
         }
     }
 
     private void start(int port) {
+        this.port = port;
+        super.start();
+    }
+
+    @Override
+    public void run() {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         try {
             ChannelFuture future = serverBootstrap.group(BOOS_GROUP, WORK_GROUP)
@@ -51,9 +62,14 @@ public class RpcServer {
                         @Override
                         protected void initChannel(Channel channel) throws Exception {
                             ChannelPipeline pp = channel.pipeline();
-                            pp.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
+                            /*pp.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
                             pp.addLast(new StringDecoder(CharsetUtil.UTF_8));
-                            pp.addLast(new StringEncoder(CharsetUtil.UTF_8));
+                            pp.addLast(new StringEncoder(CharsetUtil.UTF_8));*/
+                            pp.addLast(
+                                    new ObjectDecoder(1024, ClassResolvers.cacheDisabled(this
+                                            .getClass().getClassLoader())));
+                            // 设置发送消息编码器
+                            pp.addLast(new ObjectEncoder());
                             pp.addLast(new RpcServerHandler(RpcServer.this));
                         }
                     }).bind(port).sync();

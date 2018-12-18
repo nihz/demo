@@ -30,7 +30,7 @@ public class NettyClient implements Runnable {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
                             pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
-                            pipeline.addLast("frameEncoder", new LengthFieldPrepender(Integer.MAX_VALUE, 4));
+                            // pipeline.addLast("frameEncoder", new LengthFieldPrepender(Integer.MAX_VALUE, 4));
                             pipeline.addLast("decoder", new StringDecoder(CharsetUtil.UTF_8));
                             pipeline.addLast("encoder", new StringEncoder(CharsetUtil.UTF_8));
                             pipeline.addLast("handler", new  MyClient());

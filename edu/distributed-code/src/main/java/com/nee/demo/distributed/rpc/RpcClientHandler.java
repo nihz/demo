@@ -9,16 +9,17 @@ import java.lang.reflect.Method;
 @Slf4j
 public class RpcClientHandler extends ChannelInboundHandlerAdapter {
 
-    private final RpcClient rpcClient;
+    private final RpcNettyClient rpcNettyClient;
 
-    public RpcClientHandler(RpcClient rpcClient) {
+    public RpcClientHandler(RpcNettyClient rpcNettyClient) {
         super();
-        this.rpcClient = rpcClient;
+        this.rpcNettyClient = rpcNettyClient;
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         log.info("channelActive...");
+        // ctx.writeAndFlush("test");
     }
 
     @Override
@@ -31,7 +32,7 @@ public class RpcClientHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         log.info("client receive message: {}", msg);
 
-        rpcClient.handleResult(msg);
+        rpcNettyClient.handleResult(msg);
 
         ctx.close();
     }

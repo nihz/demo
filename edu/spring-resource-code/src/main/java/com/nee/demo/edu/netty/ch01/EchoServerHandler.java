@@ -23,7 +23,6 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
         ByteBuf in = (ByteBuf)msg;
         log.info("Server received: {}" , in.toString(CharsetUtil.UTF_8));
-        log.info(in.toString(CharsetUtil.UTF_8));
         ctx.write(in.toString(CharsetUtil.UTF_8));
     }
 

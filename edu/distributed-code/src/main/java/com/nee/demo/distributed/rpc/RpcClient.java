@@ -16,20 +16,16 @@ public class RpcClient implements InvocationHandler {
 
     Object acquire(Class clazz) {
 
-        return Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(), this);
+        return Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, this);
     }
-
-    public void handleResult(Object msg) {
-        nettyClient.handleResult(msg);
-    }
-
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        InvokeRequest invokeRequest = new InvokeRequest(new Packet(method.getDeclaringClass().getName(), method.getName(), args, new Random().nextInt(10000)));
-        CountDownLatch countDownLatch = new CountDownLatch(1);
+        InvokeRequest invokeRequest = new InvokeRequest(
+                new Packet(method.getDeclaringClass().getName(), method.getName(), method.getParameterTypes(), args, new Random().nextInt(10000)));
+        invokeRequest.setCountDownLatch(new CountDownLatch(1));
         nettyClient.sendRequest(invokeRequest);
-        countDownLatch.await();
+        invokeRequest.getCountDownLatch().await();
         return invokeRequest.getResult();
     }
 }

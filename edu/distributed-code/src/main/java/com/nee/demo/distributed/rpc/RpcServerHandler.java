@@ -34,7 +34,7 @@ public class RpcServerHandler extends ChannelInboundHandlerAdapter {
         Packet request = (Packet) msg;
         Object instance = rpcServer.lookup(request.getServiceName());
 
-        Method method = instance.getClass().getMethod(request.getMethod());
+        Method method = instance.getClass().getMethod(request.getMethod(), request.getParamTypes());
         Object result = method.invoke(instance, request.getParams());
         ctx.channel().writeAndFlush(result);
         ctx.close();

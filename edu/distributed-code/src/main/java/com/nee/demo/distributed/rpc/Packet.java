@@ -15,5 +15,8 @@ public class Packet implements Serializable {
     private String method;
     private Class[] paramTypes;
     private Object[] params;
+
     private int xid;
+
+    private Object result;
 }

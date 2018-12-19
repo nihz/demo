@@ -1,13 +1,24 @@
 package com.nee.demo.distributed.rpc;
 
 import com.nee.demo.distributed.service.DemoService;
+import com.nee.demo.distributed.service.RpcCallService;
 
 public class RpcClientTest {
 
     public static void main(String[] args) {
 
-        DemoService demoService = (DemoService) new RpcClient().acquire(DemoService.class);
+        RpcClient rpcClient = new RpcClient();
+        DemoService demoService = (DemoService) rpcClient.acquire(DemoService.class);
+        RpcCallService rpcCallService = (RpcCallService) rpcClient.acquire(RpcCallService.class);
 
-        System.out.println(demoService.hello("nee"));
+        new Thread(() -> System.out.println("rpcCallService" + rpcCallService.call("nee"))).start();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        new Thread(() -> System.out.println("demoService" + demoService.hello("nee"))).start();
+
     }
+
 }

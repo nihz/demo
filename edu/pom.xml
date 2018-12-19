@@ -18,6 +18,7 @@
         <module>spring-boot</module>
         <module>mybatis-resource-code</module>
         <module>distributed-code</module>
+        <module>dubbo</module>
     </modules>
 
 

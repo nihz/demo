@@ -22,9 +22,10 @@ public class RpcServer extends Thread {
 
     private static final Hashtable<String, Object> bindings = new Hashtable<>();
     private static final String IP = "localhost";
-    private static final int DEFAULT_PORT = 6666;
+    private static final int DEFAULT_PORT = 7777;
     private static final int BOSS_GROUP_SIZE = Runtime.getRuntime().availableProcessors();
     private static final int WORK_GROUP_SIZE = 100;
+    private final RpcServerRegistry rpcServerRegistry;
 
     private static final EventLoopGroup BOOS_GROUP = new NioEventLoopGroup(BOSS_GROUP_SIZE);
     private static final EventLoopGroup WORK_GROUP = new NioEventLoopGroup(WORK_GROUP_SIZE);
@@ -38,12 +39,18 @@ public class RpcServer extends Thread {
     public RpcServer(int port) {
         this.start(port);
 
-
+        rpcServerRegistry = new RpcServerRegistry();
     }
 
     public void publish(Object service) {
+        String serviceName = service.getClass().getInterfaces()[0].getName();
         synchronized (bindings) {
-            bindings.put(service.getClass().getInterfaces()[0].getName(), service);
+            bindings.put(serviceName, service);
+        }
+        try {
+            rpcServerRegistry.registry(serviceName, port);
+        } catch (Exception e) {
+            throw new RuntimeException("registry service error, cause: ", e);
         }
     }
 

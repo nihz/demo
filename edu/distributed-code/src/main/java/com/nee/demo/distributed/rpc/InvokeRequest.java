@@ -1,6 +1,5 @@
 package com.nee.demo.distributed.rpc;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.concurrent.CountDownLatch;
@@ -12,6 +11,8 @@ public class InvokeRequest {
         this.packet = packet;
     }
 
+    private String host;
+    private int port;
     private Packet packet;
     private CountDownLatch countDownLatch;
     private Object result;

@@ -5,23 +5,19 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
-import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class RpcNettyClient {
     private static final String IP = "localhost";
     private static final int PORT = 6666;
-    private static final LinkedBlockingDeque<InvokeRequest> pendings = new LinkedBlockingDeque();
+    // private static final LinkedBlockingDeque<InvokeRequest> pendings = new LinkedBlockingDeque();
+    private static final ConcurrentHashMap<Integer, InvokeRequest> pendings = new ConcurrentHashMap(8);
 
     private static final EventLoopGroup GROUP = new NioEventLoopGroup();
 
@@ -56,8 +52,8 @@ public class RpcNettyClient {
 
         EventLoopGroup group = new NioEventLoopGroup();
         try {
-                ChannelFuture f = bootstrap.connect(IP, PORT).sync();
-                pendings.add(invokeRequest);
+                ChannelFuture f = bootstrap.connect(invokeRequest.getHost(), invokeRequest.getPort()).sync();
+                pendings.put(invokeRequest.getPacket().getXid(), invokeRequest);
                 f.channel().writeAndFlush(invokeRequest.getPacket());
                 f.channel().closeFuture();
         } catch (Exception e) {
@@ -71,8 +67,11 @@ public class RpcNettyClient {
         if (pendings.isEmpty()) {
             throw new RuntimeException("x");
         }
-        InvokeRequest invokeRequest = pendings.getFirst();
-        invokeRequest.setResult(msg);
+        Packet packet = (Packet) msg;
+        InvokeRequest invokeRequest = pendings.get(packet.getXid());
+        invokeRequest.setResult(packet.getResult());
         invokeRequest.getCountDownLatch().countDown();
     }
+
+
 }

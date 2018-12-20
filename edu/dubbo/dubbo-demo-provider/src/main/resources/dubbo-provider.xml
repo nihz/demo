@@ -7,7 +7,7 @@
 
     <dubbo:application name="dubbo-demo"/>
     <dubbo:protocol name="dubbo" port="20880"/>
-    <dubbo:registry protocol="dubbo" address="zookeeper://localhost:2182"/>
+    <dubbo:registry protocol="dubbo" address="zookeeper://localhost:2182" check="true"/>
     <!--<dubbo:reference interface="com.nee.demo.dubbo.api.DemoService"/>-->
     <dubbo:service interface="com.nee.demo.dubbo.api.DemoService" ref="demoService"/>
     <bean name="demoService" class="com.nee.demo.dubbo.provider.DemoServiceImpl"/>

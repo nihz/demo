@@ -7,6 +7,19 @@
 
     <dubbo:application name="dubbo-demo"/>
     <dubbo:protocol name="dubbo"/>
-    <dubbo:registry protocol="dubbo" address="zookeeper://localhost:2182" register="true"/>
-    <dubbo:reference interface="com.nee.demo.dubbo.api.DemoService" id="demoService"/>
+    <dubbo:registry protocol="dubbo" address="zookeeper://192.168.1.4:2181" register="true"/>
+    <dubbo:reference
+            interface="com.nee.demo.dubbo.api.DemoService"
+            id="demoService"
+            timeout="1"
+            cluster="failsafe"
+
+            mock="com.nee.demo.dubbo.consumer.DemoServiceMock"/>
+    <dubbo:reference
+            interface="com.nee.demo.dubbo.api.TestService"
+            id="testService"
+            timeout="200"
+            cluster="failfast"
+            injvm="true"
+            proxy="jdk" />
 </beans>

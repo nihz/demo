@@ -15,6 +15,7 @@
         <module>dubbo-demo-api</module>
         <module>dubbo-demo-provider</module>
         <module>dubbo-demo-consumer</module>
+        <module>spi-demo</module>
     </modules>
 
 

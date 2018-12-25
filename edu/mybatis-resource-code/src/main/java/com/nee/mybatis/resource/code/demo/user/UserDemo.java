@@ -36,7 +36,8 @@ public class UserDemo {
 
     public  SqlSession getSqlSession() throws FileNotFoundException {
 
-        InputStream configFile = new FileInputStream("E:\\work\\ws\\demo\\edu\\mybatis-resource-code\\src\\main\\resources\\mybatis-config.xml");
+        // InputStream configFile = new FileInputStream("E:\\work\\ws\\demo\\edu\\mybatis-resource-code\\src\\main\\resources\\mybatis-config.xml");
+        InputStream configFile = new FileInputStream("/Users/heikki/git/demo/edu/mybatis-resource-code/src/main/resources/mybatis-config.xml");
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(configFile);
 
         return sqlSessionFactory.openSession();

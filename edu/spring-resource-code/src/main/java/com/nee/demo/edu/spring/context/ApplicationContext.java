@@ -56,6 +56,11 @@ public class ApplicationContext extends DefaultListableBeanFactory implements Be
         try {
             beanDefinitions.forEach(className -> {
                 Class<?> beanClass = null;
+                try {
+                    beanClass = Class.forName(className);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException("");
+                }
                 if (beanClass.isInterface()) return;
                 BeanDefinition beanDefinition = reader.registerBean(className);
                 if (beanDefinition != null)
@@ -154,7 +159,7 @@ public class ApplicationContext extends DefaultListableBeanFactory implements Be
         }
 
 
-        return null;
+        return instance;
     }
 
     @Override

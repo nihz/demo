@@ -5,10 +5,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
 
 
-    <dubbo:application name="dubbo-demo"/>
+    <dubbo:application name="dubbo-demo" />
     <dubbo:protocol name="dubbo" port="20880"/>
-    <dubbo:registry protocol="dubbo" address="zookeeper://localhost:2182" check="true"/>
-    <!--<dubbo:reference interface="com.nee.demo.dubbo.api.DemoService"/>-->
-    <dubbo:service interface="com.nee.demo.dubbo.api.DemoService" ref="demoService"/>
+    <dubbo:registry protocol="dubbo" address="zookeeper://localhost:2182" />
+    <!--<dubbo:registry protocol="dubbo" address="zookeeper://192.168.1.4:2181" />-->
+    <dubbo:service interface="com.nee.demo.dubbo.api.DemoService" ref="demoService" />
     <bean name="demoService" class="com.nee.demo.dubbo.provider.DemoServiceImpl"/>
+
+    <dubbo:service interface="com.nee.demo.dubbo.api.DemoService" ref="demoService2" version="2.0.0"/>
+    <bean name="demoService2" class="com.nee.demo.dubbo.provider.DemoServiceImpl2"/>
 </beans>

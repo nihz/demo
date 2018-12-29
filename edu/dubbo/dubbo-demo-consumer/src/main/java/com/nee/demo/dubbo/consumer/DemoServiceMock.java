@@ -1,25 +1,25 @@
-package com.nee.demo.dubbo.provider;
+package com.nee.demo.dubbo.consumer;
 
 import com.nee.demo.dubbo.api.DemoService;
 
-public class DemoServiceImpl implements DemoService {
+public class DemoServiceMock implements DemoService {
     @Override
     public String hello() {
-        return null;
+        return "no args hello";
     }
 
     @Override
     public String hello(String name) {
-        return name + ", call dubbo service";
+        return "mock";
     }
 
     @Override
     public String hello2() {
-        return null;
+        return "hello2";
     }
 
     @Override
     public void hello3(String name, int age) {
-
+        System.out.println("hello3");
     }
 }

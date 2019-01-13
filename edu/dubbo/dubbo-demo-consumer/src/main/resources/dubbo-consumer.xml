@@ -7,9 +7,9 @@
 
     <dubbo:application name="dubbo-demo"/>
     <dubbo:protocol name="dubbo"/>
-    <dubbo:registry protocol="dubbo" check="true" address="zookeeper://localhost:2182" register="true"/>
+    <!--<dubbo:registry protocol="dubbo" check="true" address="zookeeper://localhost:2182" register="true"/>-->
 
-    <!--<dubbo:registry protocol="dubbo" address="zookeeper://192.168.1.4:2181" register="true"/>-->
+    <dubbo:registry protocol="dubbo" address="zookeeper://192.168.1.2:2181" register="true"/>
     <dubbo:reference
             interface="com.nee.demo.dubbo.api.DemoService"
             id="demoService"

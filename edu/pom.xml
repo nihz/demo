@@ -19,6 +19,10 @@
         <module>mybatis-resource-code</module>
         <module>distributed-code</module>
         <module>dubbo</module>
+        <module>mq-code</module>
+        <module>no-sql-code</module>
+        <module>concurrent-code</module>
+        <module>interview-code</module>
     </modules>
 
 

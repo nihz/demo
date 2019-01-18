@@ -23,6 +23,7 @@
         <module>no-sql-code</module>
         <module>concurrent-code</module>
         <module>interview-code</module>
+        <module>poi-demo</module>
     </modules>
 
 

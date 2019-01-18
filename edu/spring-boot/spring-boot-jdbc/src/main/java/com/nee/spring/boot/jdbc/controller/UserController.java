@@ -2,6 +2,7 @@ package com.nee.spring.boot.jdbc.controller;
 
 import com.nee.spring.boot.jdbc.domain.User;
 import com.nee.spring.boot.jdbc.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
